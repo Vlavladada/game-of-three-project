@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  #user: guest
+  #password: guest
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitMQ
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - game
+
+  eureka-service-registry:
+    image: vlavladada/game-of-three-project:eureka-service-registry
+    container_name: eureka-service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - game
+
+  player-client-service-1:
+    image: vlavladada/game-of-three-project:player-client-service
+    container_name: player1
+    ports:
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
+      - eureka-service-registry
+    environment:
+      - SPRING_PROFILES_ACTIVE=manual
+      - SPRING_APPLICATION_NAME=player1
+    networks:
+      - game
+
+  player-client-service-2:
+    image: vlavladada/game-of-three-project:player-client-service
+    container_name: player2
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq
+      - eureka-service-registry
+    environment:
+      - SPRING_PROFILES_ACTIVE=manual
+      - SPRING_APPLICATION_NAME=player2
+    networks:
+      - game
+
+networks:
+  game:
+    driver: bridge
