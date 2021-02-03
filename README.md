@@ -26,23 +26,27 @@ When a player starts, it incepts a random (whole) number and sends it to the sec
   resulting whole number is then sent back to the original sender.
   The same rules are applied until one player reaches the number 1(after the division).
 
-#Run
+# Run
+
+* **From your IDE**
+
+Things to be checked before starting the application:
+
+-- rabbitMQ is running (you can use `docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management`)
+
+-- two player-client services are opened. 
+
+-- `spring_profiles_active=manual` or `spring_profiles_active=auto` is determined for both players 
+
+-- player-client `application.properties` are `spring.application.name=player1
+server.port=8082` for the first player and `spring.application.name=player2
+server.port=8083` for the second.  Ports can be configured as you like, but names should be determined as stated.
 
 * **Using docker-compose.yml**
 
 Please load the docker-compose.yml file and run `docker-compose up`
 
 IMPORTANT: by default active profile for both players is manual, if you want to change it, please don't forget to adjust `SPRING_PROFILES_ACTIVE` variable before running.
-
-* **Using separate docker images**
-
-  -- rabbitMQ : `docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management`
-  
-  -- game-of-three : 
-
-  -- player-client-1:
-  
-  -- player-client-2:
 
   
 
