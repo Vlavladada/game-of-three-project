@@ -19,6 +19,14 @@ services:
     networks:
       - game
 
+  game-of-three-service:
+    image:
+    container_name: game-of-three-service
+    ports:
+      - "8083:8083"
+    networks:
+      - game
+
   player-client-service-1:
     image: vlavladada/game-of-three-project:player-client-service
     container_name: player1
@@ -27,6 +35,7 @@ services:
     depends_on:
       - rabbitmq
       - eureka-service-registry
+      - game-of-three-service
     environment:
       - SPRING_PROFILES_ACTIVE=manual
       - SPRING_APPLICATION_NAME=player1
@@ -41,6 +50,7 @@ services:
     depends_on:
       - rabbitmq
       - eureka-service-registry
+      - game-of-three-service
     environment:
       - SPRING_PROFILES_ACTIVE=manual
       - SPRING_APPLICATION_NAME=player2
