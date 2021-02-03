@@ -12,12 +12,10 @@ import org.springframework.web.client.HttpClientErrorException;
 @Service
 public class MessageListener {
 
-    private final Player player;
     private final PlayService playService;
     private final PlayerDialogPresenter dialogPresenter;
 
-    public MessageListener(Player player, PlayService playService, PlayerDialogPresenter dialogPresenter) {
-        this.player = player;
+    public MessageListener(PlayService playService, PlayerDialogPresenter dialogPresenter) {
         this.playService = playService;
         this.dialogPresenter = dialogPresenter;
     }

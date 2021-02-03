@@ -26,6 +26,27 @@ When a player starts, it incepts a random (whole) number and sends it to the sec
   resulting whole number is then sent back to the original sender.
   The same rules are applied until one player reaches the number 1(after the division).
 
+#Run
+
+* **Using docker-compose.yml**
+
+Please load the docker-compose.yml file and run `docker-compose up`
+
+IMPORTANT: by default active profile for both players is manual, if you want to change it, please don't forget to adjust `SPRING_PROFILES_ACTIVE` variable before running.
+
+* **Using separate docker images**
+
+  -- rabbitMQ : `docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management`
+  
+  -- game-of-three : 
+
+  -- player-client-1:
+  
+  -- player-client-2:
+
+  
+
+
 
 
 

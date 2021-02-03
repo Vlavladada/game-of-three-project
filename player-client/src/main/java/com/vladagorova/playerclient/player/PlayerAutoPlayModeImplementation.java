@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Component("player")
 @Profile("auto")
@@ -18,9 +19,13 @@ public class PlayerAutoPlayModeImplementation implements Player {
     @Override
     public int setInitialNumber() {
         Random random = new Random();
-        // int initialNumber = random.nextInt((Integer.MAX_VALUE - 2) + 1) + 2;
         int initialNumber = random.nextInt((500 - 2) + 1) + 2;
         logger.info(String.valueOf(initialNumber));
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return initialNumber;
     }
 
@@ -30,6 +35,11 @@ public class PlayerAutoPlayModeImplementation implements Player {
         for (int moveOption : availableMoveOptions) {
             if ((resultingNumber + moveOption) % 3 == 0) {
                 logger.info(String.valueOf(moveOption));
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return moveOption;
             }
         }

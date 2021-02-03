@@ -35,23 +35,4 @@ class GameLogicServiceTest {
         assertTrue(fourthCallResult);
     }
 
-    @Test
-    void startNewGame() {
-        // arrange
-
-        // act
-
-        // assert
-
-    }
-
-    @Test
-    void move() {
-        // arrange
-
-        // act
-
-        // assert
-
-    }
 }

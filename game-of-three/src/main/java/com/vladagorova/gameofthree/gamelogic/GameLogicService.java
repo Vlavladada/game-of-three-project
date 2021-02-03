@@ -60,7 +60,7 @@ public class GameLogicService {
             messagingService.sentMessageToPlayer(winner.getGameOverEventQueueName(), new GameOverMessage(GameOverMessage.WIN_RESULT));
             messagingService.sentMessageToPlayer(opponent.getGameOverEventQueueName(), new GameOverMessage(GameOverMessage.LOSE_RESULT));
             gameReserved = false;
-            return "";
+            return "1!";
         } else {
             messagingService.sentMessageToPlayer(opponent.getMoveEventQueueName(), message);
             return "Good choice! Waiting for your opponent's respond...";

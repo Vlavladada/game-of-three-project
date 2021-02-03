@@ -16,8 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MessageListenerTest {
 
     @Mock
-    private Player player;
-    @Mock
     private PlayService playService;
     @Mock
     private PlayerDialogPresenter dialogPresenter;
@@ -25,25 +23,23 @@ class MessageListenerTest {
     @Test
     void moveWasMadeMessageListenerMakesCorrectCallsToPlayService() {
         // arrange
-        MessageListener messageListener = new MessageListener(player, playService, dialogPresenter);
+        MessageListener messageListener = new MessageListener(playService, dialogPresenter);
         int initialResultingNumber = 18;
         MoveWasMadeMessage message = new MoveWasMadeMessage();
         message.setResultingNumber(initialResultingNumber);
-        Mockito.when(player.getMove(initialResultingNumber)).thenReturn(0);
         Mockito.doNothing().when(playService).makeMove(Mockito.any());
 
         // act
         messageListener.moveWasMadeMessageListener(message);
 
         // assert
-        Mockito.verify(player, Mockito.times(1)).getMove(initialResultingNumber);
-        Mockito.verify(playService, Mockito.times(1)).makeMove(0);
+        Mockito.verify(playService, Mockito.times(1)).makeMove(18);
     }
 
     @Test
     void gameOverMessageListenerRequestsNewPlayRound() {
         // arrange
-        MessageListener messageListener = new MessageListener(player, playService, dialogPresenter);
+        MessageListener messageListener = new MessageListener(playService, dialogPresenter);
         GameOverMessage gameOverMessage = new GameOverMessage();
         gameOverMessage.setResult(GameOverMessage.WIN_RESULT);
 
