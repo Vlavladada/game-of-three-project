@@ -47,14 +47,14 @@ Please run rabbitMQ using:
 
 Run player applications (better in different tabs):
 
-`docker run --name player1 -p 8082:8082 --network game -e SPRING_PROFILES_ACTIVE=auto -e SPRING_APPLICATION_NAME=player1 -e SERVER_PORT=8082 -e GAME_HOST=http://game-of-three-service:8081/game-of-three/ -e spring.rabbitmq.host=rabbitmq -e spring.rabbitmq.port=5672 vlavladada/game-of-three-project:player-client-service-1.0`
+`docker run --name player1 -p 8082:8082 --network game -e SPRING_PROFILES_ACTIVE=auto -e SPRING_APPLICATION_NAME=player1 -e SERVER_PORT=8082 -e GAME_HOST=http://game-of-three-service:8081/game-of-three/ -e SPRING_RABBITMQ_HOST=rabbitmq -e SPRING_RABBITMQ_PORT=5672 vlavladada/game-of-three-project:player-client-service-1.0`
 
 
-`docker run --name player2 -p 8083:8083 --network game -e SPRING_PROFILES_ACTIVE=auto -e SPRING_APPLICATION_NAME=player2 -e SERVER_PORT=8083 -e GAME_HOST=http://game-of-three-service:8081/game-of-three/ -e spring.rabbitmq.host=rabbitmq -e spring.rabbitmq.port=5672 vlavladada/game-of-three-project:player-client-service-1.0`
+`docker run --name player2 -p 8083:8083 --network game -e SPRING_PROFILES_ACTIVE=auto -e SPRING_APPLICATION_NAME=player2 -e SERVER_PORT=8083 -e GAME_HOST=http://game-of-three-service:8081/game-of-three/ -e SPRING_RABBITMQ_HOST=rabbitmq -e SPRING_RABBITMQ_PORT=5672 vlavladada/game-of-three-project:player-client-service-1.0`
 
 Run game-of-three service
 
-`docker run --name game-of-three-service -p 8081:8081 --network game -e SPRING_APPLICATION_NAME=game-of-three -e SERVER_PORT=8081 -e spring.rabbitmq.host=rabbitmq -e spring.rabbitmq.port=5672 vlavladada/game-of-three-project:game-of-three-1.0`
+`docker run --name game-of-three-service -p 8081:8081 --network game -e SPRING_APPLICATION_NAME=game-of-three -e SERVER_PORT=8081 -e SPRING_RABBITMQ_HOST=rabbitmq -e SPRING_RABBITMQ_PORT=5672 vlavladada/game-of-three-project:game-of-three-1.0`
 
 
 IMPORTANT: by default active profile for both players is auto, if you want to change it, please don't forget to adjust `SPRING_PROFILES_ACTIVE` variable before running.
