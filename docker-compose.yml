@@ -1,4 +1,9 @@
-version: "3.9"
+version: "3.7"
+
+networks:
+  game:
+    driver: bridge
+
 services:
   #user: guest
   #password: guest
@@ -13,17 +18,31 @@ services:
 
   eureka-service-registry:
     image: vlavladada/game-of-three-project:eureka-service-registry
-    container_name: eureka-service-registry
     ports:
       - "8761:8761"
+    container_name: eureka-service-registry
+    environment:
+      - eureka.client.register-with-eureka=false
+      - eureka.client.fetch-registry=false
+      - eureka.instance.hostname=localhost
+      - logging.level.com.netflix.eureka=OFF
+      - logging.level.com.netflix.discovery=OFF
     networks:
       - game
 
   game-of-three-service:
-    image:
+    image: vlavladada/game-of-three-project:game-of-three-service
     container_name: game-of-three-service
     ports:
       - "8083:8083"
+    depends_on:
+      - rabbitmq
+      - eureka-service-registry
+    environment:
+      - SPRING_APPLICATION_NAME=game-of-three
+      - eureka.client.enabled=true
+      - eureka.client.register-with-eureka=true
+      - eureka.instance.hostname=eureka-service-registry
     networks:
       - game
 
@@ -39,6 +58,11 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=manual
       - SPRING_APPLICATION_NAME=player1
+      - spring.rabbitmq.host=rabbitmq
+      - spring.rabbitmq.port=5672
+      - spring.rabbitmq.username=guest
+      - spring.rabbitmq.password=guest
+      - eureka.instance.hostname=eureka-service-registry
     networks:
       - game
 
@@ -54,9 +78,10 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=manual
       - SPRING_APPLICATION_NAME=player2
+      - spring.rabbitmq.host=rabbitmq
+      - spring.rabbitmq.port=5672
+      - spring.rabbitmq.username=guest
+      - spring.rabbitmq.password=guest
+      - eureka.instance.hostname=eureka-service-registry
     networks:
       - game
-
-networks:
-  game:
-    driver: bridge
