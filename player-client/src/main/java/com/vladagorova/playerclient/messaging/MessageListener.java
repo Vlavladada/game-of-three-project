@@ -4,10 +4,8 @@ import com.vladagorova.playerclient.api.client.PlayService;
 import com.vladagorova.playerclient.presenter.PlayerDialogPresenter;
 import com.vladagorova.playerclient.messaging.entity.GameOverMessage;
 import com.vladagorova.playerclient.messaging.entity.MoveWasMadeMessage;
-import com.vladagorova.playerclient.player.Player;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 public class MessageListener {
