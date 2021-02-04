@@ -23,4 +23,6 @@ public interface PlayerDialogPresenter {
     void presentMakeMoveRequestResult(String requestResult);
 
     void presentMakeMoveRequestException();
+
+    void presentInvalidFirstMoveMessage();
 }

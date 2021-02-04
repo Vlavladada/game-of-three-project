@@ -43,13 +43,23 @@ public class PlayService {
     public void startGame() {
         preventNoGameOfThreeServiceAvailableErrors();
         if (!gameIsAlreadyStarted()) {
-            String uri = BASE_URL + START_GAME_REQUEST;
-            StartGameRequest request = new StartGameRequest();
-            request.setPlayerName(player.getName());
-            dialogPresenter.presentInitialNumberRequestMessage();
-            request.setInitialNumber(player.setInitialNumber());
-            ResponseEntity<String> response = restTemplate.postForEntity(uri, request, String.class);
+            sendInitialNumber();
+        }
+    }
+
+    private void sendInitialNumber(){
+        String uri = BASE_URL + START_GAME_REQUEST;
+        StartGameRequest request = new StartGameRequest();
+        request.setPlayerName(player.getName());
+        dialogPresenter.presentInitialNumberRequestMessage();
+        request.setInitialNumber(player.setInitialNumber());
+        ResponseEntity<String> response;
+        try {
+            response = restTemplate.postForEntity(uri, request, String.class);
             dialogPresenter.presentGameStartRequestResult(response.getBody());
+        } catch (HttpClientErrorException.BadRequest e) {
+            dialogPresenter.presentInvalidFirstMoveMessage();
+            sendInitialNumber();
         }
     }
 

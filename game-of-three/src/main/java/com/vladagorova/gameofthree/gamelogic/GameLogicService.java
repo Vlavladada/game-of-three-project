@@ -34,18 +34,21 @@ public class GameLogicService {
         }
     }
 
-    public String startNewGame(String nameOfRequestInitiatorApp, StartGameMessage startGameMessage) throws PlayerNotFoundException {
+    public String startNewGame(String nameOfRequestInitiatorApp, StartGameMessage startGameMessage) throws PlayerNotFoundException, MoveNotValidException {
         if (gameLogic != null) {
             return ("Sorry, game has already started. Other player was faster, than you ;)");
         }
-        gameLogic = new GameOfThreeLogic(startGameMessage.getInitialNumber());
+        Move firstMove = new MoveGameOfThree();
+        if (!firstMove.isValidFirstMove(startGameMessage.getInitialNumber())) {
+            throw new MoveNotValidException();
+        }
         MoveWasMadeMessage message = mapStartMessageToMoveWasMadeMessage(startGameMessage);
         playerService.setPlayersByFirstPlayerApplicationName(nameOfRequestInitiatorApp);
-
         String nameOfQueueToSendTo = playerService
                 .getOpponentPlayerByPlayerApplicationName(nameOfRequestInitiatorApp)
                 .getMoveEventQueueName();
         messagingService.sentMessageToPlayer(nameOfQueueToSendTo, message);
+        gameLogic = new GameOfThreeLogic(startGameMessage.getInitialNumber());
         return "Game started";
     }
 

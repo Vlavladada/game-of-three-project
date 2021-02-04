@@ -35,7 +35,7 @@ public class GameLogicController {
 
     @PostMapping("/start")
     public String startNewGame(@RequestHeader("application-name") String nameOfRequestInitiatorApp,
-                               @RequestBody StartGameMessage startGameMessage) throws PlayerNotFoundException {
+                               @RequestBody StartGameMessage startGameMessage) throws PlayerNotFoundException, MoveNotValidException {
         return gameLogicService.startNewGame(nameOfRequestInitiatorApp, startGameMessage);
     }
 

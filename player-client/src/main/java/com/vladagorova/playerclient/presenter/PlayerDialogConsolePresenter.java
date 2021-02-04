@@ -64,4 +64,9 @@ public class PlayerDialogConsolePresenter implements PlayerDialogPresenter {
     public void presentMakeMoveRequestException() {
         logger.error("Please choose another option to get a number divisible by 3 from the following options: -1, 0, 1");
     }
+
+    @Override
+    public void presentInvalidFirstMoveMessage() {
+        logger.error("Move is not allowed. Please choose any number greater than 1");
+    }
 }
