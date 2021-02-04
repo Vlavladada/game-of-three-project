@@ -23,6 +23,11 @@ public class GameLogicController {
         this.gameLogicService = gameLogicService;
     }
 
+    @GetMapping("/health")
+    public void healthCheck() {
+
+    }
+
     @GetMapping("/start")
     public boolean gameStarted(HttpServletResponse response) {
         return gameLogicService.gameStarted();
