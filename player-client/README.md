@@ -7,10 +7,4 @@ The mode could be configured by providing the correspondent environment variable
 
 `spring_profiles_active=manual` or `spring_profiles_active=auto`
 
-The player-client microservice depends on other infrastructure which needs to be started first:
-
-* rabbitMQ
-
-* eureka-service-registry microservice - is used by the service to register itself and discover game-of-three application instances.
-
-* game-of-three
+The player-client microservice depends on rabbitMQ which needs to be started first.

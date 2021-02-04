@@ -13,10 +13,7 @@ The mode could be configured by providing the correspondent environment variable
 
 -- game-of-three - game logic management service. 
   
-Requests, received from players are validated, processed, and the result is sent to the player/players. RabbitMQ is used to eliminate errors in case any player is temporary unavailable. 
-  
- -- eureka-service-registry - Eureka Service registry Spring Boot application used for registration of the services. Helps to eliminate errors when starting player-clients before game-of-three service.
-
+Requests, received from players are validated, processed, and the result is sent to the player/players. RabbitMQ is used to eliminate errors in case any player is temporary unavailable.
 
 * **Rules**
   
@@ -42,19 +39,22 @@ Things to be checked before starting the application:
 server.port=8082` for the first player and `spring.application.name=player2
 server.port=8083` for the second.  Ports can be configured as you like, but names should be determined as stated.
 
-* **Using docker-compose.yml**
+* **Using docker**
 
-Please load the docker-compose.yml file and run `docker-compose up`
+Please run rabbitMQ using: 
 
-IMPORTANT: by default active profile for both players is manual, if you want to change it, please don't forget to adjust `SPRING_PROFILES_ACTIVE` variable before running.
+`docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 --network game rabbitmq:3-management`
 
-  
+Run player applications (better in different tabs):
 
-
-
-
+`docker run --name player1 -p 8082:8082 --network game -e SPRING_PROFILES_ACTIVE=auto -e SPRING_APPLICATION_NAME=player1 -e SERVER_PORT=8082 -e GAME_HOST=http://game-of-three-service:8081/game-of-three/ -e spring.rabbitmq.host=rabbitmq -e spring.rabbitmq.port=5672 vlavladada/game-of-three-project:player-client-service-1.0`
 
 
+`docker run --name player2 -p 8083:8083 --network game -e SPRING_PROFILES_ACTIVE=auto -e SPRING_APPLICATION_NAME=player2 -e SERVER_PORT=8083 -e GAME_HOST=http://game-of-three-service:8081/game-of-three/ -e spring.rabbitmq.host=rabbitmq -e spring.rabbitmq.port=5672 vlavladada/game-of-three-project:player-client-service-1.0`
+
+Run game-of-three service
+
+`docker run --name game-of-three-service -p 8081:8081 --network game -e SPRING_APPLICATION_NAME=game-of-three -e SERVER_PORT=8081 -e spring.rabbitmq.host=rabbitmq -e spring.rabbitmq.port=5672 vlavladada/game-of-three-project:game-of-three-1.0`
 
 
-
+IMPORTANT: by default active profile for both players is auto, if you want to change it, please don't forget to adjust `SPRING_PROFILES_ACTIVE` variable before running.
