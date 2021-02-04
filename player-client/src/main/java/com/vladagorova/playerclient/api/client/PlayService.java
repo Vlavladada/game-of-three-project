@@ -6,12 +6,15 @@ import com.vladagorova.playerclient.player.Player;
 import com.vladagorova.playerclient.presenter.PlayerDialogPresenter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
@@ -19,21 +22,22 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class PlayService {
 
-    private final String BASE_URL = "http://localhost:8081/game-of-three/";
+    @Value("${game.host}")
+    private String BASE_URL;
     private final String START_GAME_REQUEST = "start";
     private final String MAKE_MOVE_REQUEST = "move";
+    private final String HEALTH_CHECK = "health";
+
 
     private final RestTemplate restTemplate;
     private final PlayerDialogPresenter dialogPresenter;
-    private final DiscoveryClient discoveryClient;
     private final Player player;
 
     private final Logger logger = LoggerFactory.getLogger(PlayService.class);
 
-    public PlayService(RestTemplate restTemplate, PlayerDialogPresenter dialogPresenter, DiscoveryClient discoveryClient, Player player) {
+    public PlayService(RestTemplate restTemplate, PlayerDialogPresenter dialogPresenter, Player player) {
         this.restTemplate = restTemplate;
         this.dialogPresenter = dialogPresenter;
-        this.discoveryClient = discoveryClient;
         this.player = player;
     }
 
@@ -83,13 +87,19 @@ public class PlayService {
     }
 
     private void preventNoGameOfThreeServiceAvailableErrors() {
-        while (discoveryClient.getInstances("game-of-three").isEmpty()) {
-            dialogPresenter.presentNoGameOfThreeServiceAvailableMessage();
+        int statusCode = 0;
+        while (statusCode != 200) {
             try {
-                TimeUnit.SECONDS.sleep(5);
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage());
+                statusCode = restTemplate.getForEntity(BASE_URL + HEALTH_CHECK, String.class).getStatusCodeValue();
+            } catch (ResourceAccessException e) {
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                dialogPresenter.presentNoGameOfThreeServiceAvailableMessage();
             }
         }
     }
+
 }
