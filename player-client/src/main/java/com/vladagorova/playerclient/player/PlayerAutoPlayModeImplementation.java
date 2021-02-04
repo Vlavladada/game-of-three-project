@@ -31,7 +31,7 @@ public class PlayerAutoPlayModeImplementation implements Player {
 
     @Override
     public int getMove(int resultingNumber) {
-        List<Integer> availableMoveOptions = List.of(-1, 0, 1); // TODO
+        List<Integer> availableMoveOptions = List.of(-1, 0, 1);
         for (int moveOption : availableMoveOptions) {
             if ((resultingNumber + moveOption) % 3 == 0) {
                 logger.info(String.valueOf(moveOption));
@@ -55,4 +55,5 @@ public class PlayerAutoPlayModeImplementation implements Player {
     public void setName(String name) {
         this.name = name;
     }
+
 }
