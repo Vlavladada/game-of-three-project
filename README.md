@@ -35,11 +35,13 @@ Things to be checked before starting the application:
 
 -- `spring_profiles_active=manual` or `spring_profiles_active=auto` is determined for both players 
 
+-- environment variable `GAME_HOST=http://localhost:8081/game-of-three/` is determined for both players
+
 -- player-client `application.properties` are `spring.application.name=player1
 server.port=8082` for the first player and `spring.application.name=player2
 server.port=8083` for the second.  Ports can be configured as you like, but names should be determined as stated.
 
-* **Using docker**
+* **Using docker (only for auto play mode) **
 
 Please run rabbitMQ using: 
 
@@ -55,6 +57,3 @@ Run player applications (better in different tabs):
 Run game-of-three service
 
 `docker run --name game-of-three-service -p 8081:8081 --network game -e SPRING_APPLICATION_NAME=game-of-three -e SERVER_PORT=8081 -e SPRING_RABBITMQ_HOST=rabbitmq -e SPRING_RABBITMQ_PORT=5672 vlavladada/game-of-three-project:game-of-three-1.0`
-
-
-IMPORTANT: by default active profile for both players is auto, if you want to change it, please don't forget to adjust `SPRING_PROFILES_ACTIVE` variable before running.
