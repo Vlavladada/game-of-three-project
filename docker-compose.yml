@@ -1,0 +1,68 @@
+version: "3.7"
+
+networks:
+  game:
+    driver: bridge
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.7.24-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - game
+
+  game-of-three-service:
+    image: vlavladada/game-of-three-project:game-of-three-1.0
+    container_name: game-of-three-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - player-client-service-1
+      - player-client-service-2
+    environment:
+      - SPRING_APPLICATION_NAME=game-of-three
+      - SERVER_PORT=8081
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    networks:
+      - game
+
+  player-client-service-1:
+    image: vlavladada/game-of-three-project:player-client-service-1.0
+    container_name: player1
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=auto
+      - SPRING_APPLICATION_NAME=player1
+      - SERVER_PORT=8082
+      - GAME_HOST=http://game-of-three-service:8081/game-of-three/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    networks:
+      - game
+
+  player-client-service-2:
+    image: vlavladada/game-of-three-project:player-client-service-1.0
+    container_name: player2
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=auto
+      - SPRING_APPLICATION_NAME=player2
+      - SERVER_PORT=8083
+      - GAME_HOST=http://game-of-three-service:8081/game-of-three/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    networks:
+      - game
