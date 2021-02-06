@@ -41,7 +41,7 @@ Things to be checked before starting the application:
 server.port=8082` for the first player and `spring.application.name=player2
 server.port=8083` for the second.  Ports can be configured as you like, but names should be determined as stated.
 
-* **Using docker (only for auto play mode) **
+* **Using docker (only for auto play mode)**
 
 Please run rabbitMQ using: 
 
@@ -57,3 +57,9 @@ Run player applications (better in different tabs):
 Run game-of-three service
 
 `docker run --name game-of-three-service -p 8081:8081 --network game -e SPRING_APPLICATION_NAME=game-of-three -e SERVER_PORT=8081 -e SPRING_RABBITMQ_HOST=rabbitmq -e SPRING_RABBITMQ_PORT=5672 vlavladada/game-of-three-project:game-of-three-1.0`
+
+* **Using docker compose (only for auto play mode)**
+
+Download the docker-compose.yml file
+
+Go to a folder which contains the file and run `docker-compose up` 
